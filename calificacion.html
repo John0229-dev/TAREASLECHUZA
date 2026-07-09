@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calificación · Tareas la Lechuza</title>
+  <link rel="icon" type="image/x-icon" href="nuevitologo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #3A3EC8;
+      --blue-dark: #2a2e9e;
+      --gold: #ffbf00;
+      --red: #ff0400;
+      --crimson: #e53935;
+      --star-off: #dde0f0;
+      --white: #ffffff;
+      --gray-light: #f4f5fb;
+      --gray-mid: #e2e4f0;
+      --text: #1a1a2e;
+      --text-muted: #555570;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--blue); height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 12px rgba(58,62,200,0.3);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo img { width: 38px; height: 38px; object-fit: contain; }
+    .logo-text { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); line-height: 1.1; }
+    .logo-text span {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--crimson);
+      letter-spacing: 0.10em;
+    }
+    .nav-links { display: none; gap: 6px; }
+    .nav-links a {
+      color: var(--white); text-decoration: none;
+      font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 500;
+      padding: 6px 14px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.15); }
+    .nav-links a.active { background: rgba(255,255,255,0.22); }
+    .hamburger {
+      background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; gap: 5px; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── MOBILE MENU ─── */
+    .mobile-menu {
+      position: fixed; top: 60px; right: -100%;
+      width: 220px; height: calc(100vh - 60px);
+      background: var(--blue-dark); z-index: 99;
+      transition: right 0.3s ease;
+      display: flex; flex-direction: column; padding: 30px 20px; gap: 8px;
+    }
+    .mobile-menu.open { right: 0; }
+    .mobile-menu a {
+      color: var(--white); text-decoration: none;
+      font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500;
+      padding: 12px 16px; border-radius: 10px; transition: background 0.2s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active { background: rgba(255,255,255,0.15); }
+    .menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 98; }
+    .menu-overlay.open { display: block; }
+
+    /* ─── MAIN ─── */
+    main { padding-top: 60px; }
+
+    /* ══════════════════
+       COMPONENTES COMPARTIDOS
+    ══════════════════ */
+
+    .section-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--blue); margin-bottom: 12px;
+    }
+
+    /* Carrusel */
+    .carousel-wrap { position: relative; overflow: hidden; background: var(--gray-mid); border-radius: 10px; }
+    .carousel-track { display: flex; transition: transform 0.45s ease; }
+    .carousel-slide {
+      min-width: 100%; height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--gray-mid), #c8cbe8);
+      font-size: 0.85rem; color: var(--text-muted); position: relative; overflow: hidden;
+    }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .carousel-slide .ph { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .slide-caption {
+      position: absolute; bottom: 10px; left: 12px;
+      background: rgba(58,62,200,0.82); color: white;
+      font-size: 0.7rem; padding: 3px 10px; border-radius: 20px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(58,62,200,0.75); border: none; color: white;
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      font-size: 1rem; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; z-index: 5;
+    }
+    .carousel-btn:hover { background: var(--blue); }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+    .carousel-dots { display: flex; justify-content: center; gap: 6px; padding: 8px 0 4px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gray-mid); cursor: pointer; transition: background 0.2s; }
+    .dot.active { background: var(--blue); }
+
+    /* Estrellas interactivas */
+    .stars-box {
+      background: var(--gray-light);
+      border: 1px solid var(--gray-mid);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .stars-row {
+      display: flex; gap: 6px; margin-bottom: 12px;
+    }
+    .star {
+      font-size: 2rem; cursor: pointer;
+      color: var(--star-off);
+      transition: color 0.15s, transform 0.1s;
+      user-select: none;
+    }
+    .star:hover, .star.lit { color: var(--gold); }
+    .star:hover { transform: scale(1.2); }
+    .stars-cta {
+      font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;
+    }
+    .btn-calificar {
+      background: var(--red); color: white;
+      border: none; border-radius: 8px;
+      padding: 9px 20px;
+      font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-calificar:hover { background: var(--red); }
+    .rating-msg {
+      font-size: 0.8rem; color: var(--red); font-weight: 600;
+      min-height: 20px; margin-top: 8px;
+    }
+
+    /* Reseña del cliente */
+    .review-box {
+      background: var(--gray-light);
+      border: 1px solid var(--gray-mid);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .review-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .review-content p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+    .review-content strong { display: block; font-family: 'Poppins', sans-serif; font-size: 0.85rem; margin-bottom: 3px; }
+
+    /* Gráfica donut animada */
+    .chart-box {
+      background: var(--gray-light);
+      border: 1px solid var(--gray-mid);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .chart-inner {
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .donut-wrap {
+      position: relative; width: 110px; height: 110px; flex-shrink: 0;
+    }
+    .donut-svg { width: 110px; height: 110px; transform: rotate(-90deg); }
+    .donut-bg { fill: none; stroke: var(--gray-mid); stroke-width: 14; }
+    .donut-fill {
+      fill: none; stroke: var(--blue); stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1);
+    }
+    .donut-fill.green { stroke: #2e7d32; }
+    .donut-fill.gold  { stroke: var(--gold); }
+    .donut-label {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800; font-size: 1.1rem; color: var(--text);
+      pointer-events: none;
+    }
+    .chart-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .legend-dot.blue  { background: var(--blue); }
+    .legend-dot.green { background: #2e7d32; }
+    .legend-dot.gold  { background: var(--gold); }
+    .legend-text { font-size: 0.78rem; color: var(--text-muted); }
+    .legend-text strong { color: var(--text); font-weight: 600; }
+    .legend-pct {
+      margin-left: auto;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem; font-weight: 700; color: var(--blue);
+    }
+
+    /* ══════════════════
+       MOBILE LAYOUT
+    ══════════════════ */
+    .mobile-view { display: block; padding: 24px 18px; }
+    .desktop-view { display: none; }     
+
+    .mobile-view .carousel-wrap { margin-bottom: 20px; }
+
+    .mobile-view .stars-box { margin-bottom: 16px; }
+    .mobile-view .review-box { margin-bottom: 16px; }
+    .mobile-view .chart-box { margin-bottom: 8px; }
+
+    /* ══════════════════
+       DESKTOP LAYOUT
+    ══════════════════ */
+    @media (min-width: 768px) {
+      .hamburger { display: none; }
+      .mobile-view { display: none; }
+      .desktop-view { display: block; }
+      .nav-links { display: flex; }
+    }
+
+    .desktop-content {
+      max-width: 1100px; margin: 0 auto;
+      padding: 40px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--gray-mid);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .panel .carousel-slide { height: 240px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--blue); color: var(--white);
+      padding: 32px 24px; text-align: center; margin-top: 20px;
+    }
+    footer .footer-links {
+      display: flex; justify-content: center; gap: 20px;
+      flex-wrap: wrap; margin-bottom: 16px;
+    }
+    footer .footer-links a {
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      font-size: 0.85rem; transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--white); }
+    footer p { font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a1a2e; color: white;
+      padding: 10px 22px; border-radius: 30px;
+      font-size: 0.82rem; font-family: 'Poppins', sans-serif; font-weight: 500;
+      z-index: 200; transition: transform 0.35s ease; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { background: #2e7d32; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .carousel-track, .donut-fill { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <a href="nuevitologo.png" class="logo">
+      <img src="nuevitologo.png" alt="Tareas la Lechuza" />
+      <div class="logo-text">
+        Tareas la Lechuza
+        <span><strong>El Emperador de la Aprobacion</strong></span>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="calificacion.html" class="active">Calificación</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">🏠 Inicio</a>
+    <a href="noticias.html">📰 Noticias</a>
+    <a href="contacto.html">📞 Contacto</a>
+    <a href="calificacion.html" class="active">⭐ Calificación</a>
+    <p style="margin-top:auto;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center;">Tareas la Lechuza © 2026</p>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══ MAIN ═══ -->
+  <main>
+
+    <!-- ══ MOBILE ══ -->
+    <div class="mobile-view">
+
+      <!-- Carrusel referencias -->
+      <p class="section-label">📸 Referencias de clientes</p>
+      <div class="carousel-wrap" id="mCarousel">
+        <div class="carousel-track" id="mTrack">
+          <div class="carousel-slide"><img src="REF1.png" alt="Referencia 1" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF2.png" alt="Referencia 2" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF3.png" alt="Referencia 3" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF4.png" alt="Referencia 4" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF5.png" alt="Referencia 5" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF6.png" alt="Referencia 6" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF7.png" alt="Referencia 10" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF8.png" alt="Referencia 11" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF9.png" alt="Referencia 12" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF10.png" alt="Referencia 13" /><span class="slide-caption"></span></div>
+          <div class="carousel-slide"><img src="REF11.png" alt="Referencia 14" /><span class="slide-caption"></span></div>
+        </div>
+        <button class="carousel-btn prev" onclick="moveC('m',-1)">‹</button>
+        <button class="carousel-btn next" onclick="moveC('m',1)">›</button>
+      </div>
+      <div class="carousel-dots" id="mDots">
+  <div class="dot active" onclick="goC('m',0)"></div>
+  <div class="dot" onclick="goC('m',1)"></div>
+  <div class="dot" onclick="goC('m',2)"></div>
+  <div class="dot" onclick="goC('m',3)"></div>
+  <div class="dot" onclick="goC('m',4)"></div>
+  <div class="dot" onclick="goC('m',5)"></div>
+  <div class="dot" onclick="goC('m',6)"></div>
+  <div class="dot" onclick="goC('m',7)"></div>
+  <div class="dot" onclick="goC('m',8)"></div>
+  <div class="dot" onclick="goC('m',9)"></div>
+  <div class="dot" onclick="goC('m',10)"></div>
+</div>
+
+      <br/>
+
+      <!-- Estrellas -->
+      <p class="section-label">⭐ Califica el servicio</p>
+      <div class="stars-box">
+        <div class="stars-row" id="mStars">
+          <span class="star" data-v="1">★</span>
+          <span class="star" data-v="2">★</span>
+          <span class="star" data-v="3">★</span>
+          <span class="star" data-v="4">★</span>
+          <span class="star" data-v="5">★</span>
+        </div>
+        <p class="stars-cta">Toca las estrellas para calificar</p>
+        <button class="btn-calificar" onclick="submitRating('m')">Enviar calificación</button>
+        <p class="rating-msg" id="mRatingMsg"></p>
+      </div>
+
+      <br/>
+
+      <!-- DATOS CURIOSOS MOVILE -->
+      <p class="section-label">💬 dato curioso (un dato curioso al mes)</p>
+      <div class="review-box">
+        <div class="review-avatar" ><img class="review-avatar" src="nuevitologo.png" alt="Logo"></div>
+        <div class="review-content">
+          <strong>2025</strong>
+          <h5>Tareas La lechuza tuvo un cambio blasfemo, cambiando el nombre por "Lechuga" solo por una chica que tuvo influencia en el negocio.
+            y para seguir con el negocio, se cambio el nombre gracias a amistades de Rusia que estaban aprendiendo español.
+          </h5>
+        </div>
+      </div>
+
+      <br/>
+
+      <!-- Gráfica -->
+      <p class="section-label">📊 Satisfacción general</p>
+      <div class="chart-box">
+        <div class="chart-inner">
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 100 100">
+              <circle class="donut-bg" cx="50" cy="50" r="45"/>
+              <circle class="donut-fill green" cx="50" cy="50" r="45" id="donutFill"/>
+            </svg>
+            <span class="donut-label" id="donutLabel">0%</span>
+          </div>
+          <div class="chart-legend" id="chartLegend">
+            <div class="legend-item">
+              <div class="legend-dot green"></div>
+              <span class="legend-text"><strong>Les gustó</strong></span>
+              <span class="legend-pct" id="pctBueno">0%</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot gold"></div>
+              <span class="legend-text"><strong>Regular</strong></span>
+              <span class="legend-pct" id="pctRegular">0%</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot blue"></div>
+              <span class="legend-text"><strong>No les gustó</strong></span>
+              <span class="legend-pct" id="pctMalo">0%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+<p><strong>Puedes ver las referencias aqui en este Link:<a href="https://reflechuzatareasdelemperador.netlify.app" target="_blank">
+  Referencias
+</a>
+ </strong></p>
+    </div><!-- /mobile -->
+
+
+    <!-- ══ DESKTOP ══ -->
+    <div class="desktop-view">
+      <div class="desktop-content">
+
+        <!-- Panel izquierdo: carrusel -->
+        <div class="panel">
+          <p class="section-label">📸 Referencias de clientes</p>
+          <div class="carousel-wrap" id="dCarousel">
+            <div class="carousel-track" id="dTrack">
+              <div class="carousel-slide"><img src="REF1.png" alt="Referencia 1" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF2.png" alt="Referencia 2" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF3.png" alt="Referencia 3" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF4.png" alt="Referencia 4" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF5.png" alt="Referencia 5" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF6.png" alt="Referencia 6" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF7.png" alt="Referencia 7" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF8.png" alt="Referencia 8" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF9.png" alt="Referencia 9" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF10.png" alt="Referencia 10" /><span class="slide-caption"></span></div>
+              <div class="carousel-slide"><img src="REF11.png" alt="Referencia 11" /><span class="slide-caption"></span></div>
+            </div>
+            <button class="carousel-btn prev" onclick="moveC('d',-1)">‹</button>
+            <button class="carousel-btn next" onclick="moveC('d',1)">›</button>
+          </div>
+          <div class="carousel-dots" id="dDots">
+            <div class="dot active" onclick="goC('d',0)"></div>
+            <div class="dot" onclick="goC('d',1)"></div>
+            <div class="dot" onclick="goC('d',2)"></div>
+            <div class="dot" onclick="goC('d',3)"></div>
+            <div class="dot" onclick="goC('d',4)"></div>
+            <div class="dot" onclick="goC('d',5)"></div>
+            <div class="dot" onclick="goC('d',6)"></div>
+            <div class="dot" onclick="goC('d',7)"></div>
+            <div class="dot" onclick="goC('d',8)"></div>
+            <div class="dot" onclick="goC('d',9)"></div>
+            <div class="dot" onclick="goC('d',10)"></div>
+          </div>
+        </div>
+      </div>
+
+
+        <!-- Panel derecho: estrellas + reseña + gráfica -->
+        <div class="panel">
+
+          <!-- Estrellas -->
+          <p class="section-label">⭐ Califica el servicio</p>
+          <div class="stars-box">
+            <div class="stars-row" id="dStars">
+              <span class="star" data-v="1">★</span>
+              <span class="star" data-v="2">★</span>
+              <span class="star" data-v="3">★</span>
+              <span class="star" data-v="4">★</span>
+              <span class="star" data-v="5">★</span>
+            </div>
+            <p class="stars-cta">Haz clic en las estrellas para calificar</p>
+            <button class="btn-calificar" onclick="submitRating('d')">Enviar calificación</button>
+            <p class="rating-msg" id="dRatingMsg"></p>
+          </div>
+
+          <!-- DATOS CURIOSOS PC VERSION -->
+          <p class="section-label">Dato curioso (un dato curioso al mes)</p>
+          <div class="review-box">
+            <div class="review-avatar" ><img class="review-avatar" src="nuevitologo.png"></div>
+            <div class="review-content">
+              <strong>2025</strong>
+              <h5 >Tareas La lechuza tuvo un cambio blasfemo, cambiando el nombre por "Lechuga" solo por una chica que tuvo influencia en el negocio.
+            y para seguir con el negocio, se cambio el nombre gracias a amistades de Rusia que estaban aprendiendo español.</h5>
+            </div>
+          </div>
+
+          <!-- Gráfica -->
+          <p class="section-label">📊 Satisfacción general</p>
+          <div class="chart-box">
+            <div class="chart-inner">
+              <div class="donut-wrap">
+                <svg class="donut-svg" viewBox="0 0 100 100">
+                  <circle class="donut-bg" cx="50" cy="50" r="45"/>
+                  <circle class="donut-fill green" cx="50" cy="50" r="45" id="donutFillD"/>
+                </svg>
+                <span class="donut-label" id="donutLabelD">0%</span>
+              </div>
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <div class="legend-dot green"></div>
+                  <span class="legend-text"><strong>Les gustó</strong></span>
+                  <span class="legend-pct" id="pctBuenoD">0%</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot gold"></div>
+                  <span class="legend-text"><strong>Regular</strong></span>
+                  <span class="legend-pct" id="pctRegularD">0%</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot blue"></div>
+                  <span class="legend-text"><strong>No les gustó</strong></span>
+                  <span class="legend-pct" id="pctMaloD">0%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /panel derecho -->
+<p><strong>Puedes ver las referencias aqui en este Link:<a href="https://reflechuzatareasdelemperador.netlify.app" target="_blank">
+  Referencias
+</a>
+ </strong></p>
+      </div>
+    </div><!-- /desktop -->
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    
+    <div class="footer-links">
+      <a href="inicio.html">Inicio</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="calificacion.html">Calificación</a>
+    </div>
+    <p>© 2026 Tareas la Lechuza · Apoyo académico universitario</p>
+  </footer>
+
+  <script>
+    // ─── Hamburger ───
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+    function toggleMenu() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      menuOverlay.classList.toggle('open');
+    }
+    hamburger.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+    mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('open')) toggleMenu();
+    }));
+
+    // ─── Toast ───
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast ' + type;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ─── Carrusel ───
+    const carousels = { m: { cur: 0, total: 11 }, d: { cur: 0, total: 11 } };
+    function moveC(id, dir) {
+      const c = carousels[id];
+      c.cur = (c.cur + dir + c.total) % c.total;
+      updateC(id);
+    }
+    function goC(id, i) { carousels[id].cur = i; updateC(id); }
+    function updateC(id) {
+      const c = carousels[id];
+      document.getElementById(id + 'Track').style.transform = `translateX(-${c.cur * 100}%)`;
+      document.getElementById(id + 'Dots').querySelectorAll('.dot')
+        .forEach((d, i) => d.classList.toggle('active', i === c.cur));
+    }
+    setInterval(() => moveC('m', 1), 4000);
+    setInterval(() => moveC('d', 1), 4200);
+
+    // ─── Estrellas ───
+    // Datos de calificaciones: {1:0, 2:0, 3:0, 4:0, 5:0}
+    let ratings = JSON.parse(localStorage.getItem('lechuza_ratings') || '{"1":0,"2":0,"3":0,"4":0,"5":0}');
+    let selectedRating = { m: 0, d: 0 };
+
+    function initStars(prefix) {
+      const container = document.getElementById(prefix + 'Stars');
+      container.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('mouseenter', () => highlightStars(prefix, +star.dataset.v));
+        star.addEventListener('mouseleave', () => highlightStars(prefix, selectedRating[prefix]));
+        star.addEventListener('click', () => {
+          selectedRating[prefix] = +star.dataset.v;
+          highlightStars(prefix, selectedRating[prefix]);
+        });
+      });
+    }
+
+    function highlightStars(prefix, val) {
+      document.getElementById(prefix + 'Stars').querySelectorAll('.star')
+        .forEach(s => s.classList.toggle('lit', +s.dataset.v <= val));
+    }
+
+    function submitRating(prefix) {
+      const val = selectedRating[prefix];
+      if (!val) {
+        document.getElementById(prefix + 'RatingMsg').textContent = 'Selecciona una calificación primero.';
+        return;
+      }
+      ratings[val] = (ratings[val] || 0) + 1;
+      localStorage.setItem('lechuza_ratings', JSON.stringify(ratings));
+      document.getElementById(prefix + 'RatingMsg').textContent = '¡Gracias por tu calificación!';
+      selectedRating[prefix] = 0;
+      highlightStars(prefix, 0);
+      updateChart();
+      showToast('⭐ Calificación enviada. ¡Gracias!', 'success');
+    }
+
+    initStars('m');
+    initStars('d');
+
+    // ─── Gráfica donut animada ───
+    // Circunferencia del círculo r=45: 2*PI*45 ≈ 282.74
+    const CIRC = 282.74;
+
+    function updateChart() {
+      const total = Object.values(ratings).reduce((a, b) => a + b, 0);
+      if (total === 0) return;
+
+      // Bueno = 4 y 5 estrellas, Regular = 3, Malo = 1 y 2
+      const bueno   = (ratings[4] || 0) + (ratings[5] || 0);
+      const regular = ratings[3] || 0;
+      const malo    = (ratings[1] || 0) + (ratings[2] || 0);
+
+      const pBueno   = Math.round((bueno / total) * 100);
+      const pRegular = Math.round((regular / total) * 100);
+      const pMalo    = Math.round((malo / total) * 100);
+
+      // Animar donut (mostramos % de "les gustó" como principal)
+      animateDonut('donutFill',  'donutLabel',  pBueno);
+      animateDonut('donutFillD', 'donutLabelD', pBueno);
+
+      // Actualizar leyenda móvil
+      animatePct('pctBueno',   pBueno);
+      animatePct('pctRegular', pRegular);
+      animatePct('pctMalo',    pMalo);
+
+      // Actualizar leyenda desktop
+      animatePct('pctBuenoD',   pBueno);
+      animatePct('pctRegularD', pRegular);
+      animatePct('pctMaloD',    pMalo);
+    }
+
+    function animateDonut(fillId, labelId, targetPct) {
+      const fill  = document.getElementById(fillId);
+      const label = document.getElementById(labelId);
+      const targetOffset = CIRC - (CIRC * targetPct / 100);
+
+      // Leer valor actual desde el label
+      let current = parseInt(label.textContent) || 0;
+      const step = (targetPct - current) / 40;
+      let frame = 0;
+
+      fill.style.strokeDashoffset = targetOffset;
+
+      const interval = setInterval(() => {
+        current += step;
+        frame++;
+        label.textContent = Math.round(current) + '%';
+        if (frame >= 40) {
+          label.textContent = targetPct + '%';
+          clearInterval(interval);
+        }
+      }, 35);
+    }
+
+    function animatePct(id, target) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let cur = parseInt(el.textContent) || 0;
+      const step = (target - cur) / 30;
+      let frame = 0;
+      const interval = setInterval(() => {
+        cur += step; frame++;
+        el.textContent = Math.round(cur) + '%';
+        if (frame >= 30) { el.textContent = target + '%'; clearInterval(interval); }
+      }, 30);
+    }
+
+    // Cargar datos al iniciar
+    updateChart();
+  </script>
+</body>
+</html>

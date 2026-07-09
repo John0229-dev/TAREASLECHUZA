@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tareas la Lechuza</title>
+  <link rel="icon" type="image/x-icon" href="nuevitologo.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #3A3EC8;
+      --blue-dark: #2a2e9e;
+      --crimson: #ff0000;
+      --white: #ffffff;
+      --gray-light: #f4f5fb;
+      --gray-mid: #e2e4f0;
+      --text: #1a1a2e;
+      --text-muted: #555570;
+    }
+
+    .favicon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--blue);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 12px rgba(58,62,200,0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+/*logo imagen tamaño*/
+    .logo img, .logo-svg { width: 38px; height: 38px; object-fit: contain; }
+    .logo-text {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .logo-text {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .logo-text span {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--crimson);
+      letter-spacing: 0.10em;
+    }
+
+    /* Desktop nav links */
+    .nav-links {
+      display: none;
+      gap: 6px;
+    }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.15); }
+
+    /* Hamburger */
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── MOBILE SLIDE MENU ─── */
+    .mobile-menu {
+      position: fixed;
+      top: 60px; right: -100%;
+      width: 220px;
+      height: calc(100vh - 60px);
+      background: var(--blue-dark);
+      z-index: 99;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      gap: 8px;
+    }
+    .mobile-menu.open { right: 0; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 12px 16px;
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .mobile-menu a:hover { background: rgba(255,255,255,0.12); }
+    .mobile-menu .menu-footer {
+      margin-top: auto;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+    }
+
+    /* overlay for menu */
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 98;
+    }
+    .menu-overlay.open { display: block; }
+
+    /* ─── MAIN ─── */
+    main { padding-top: 60px; }
+
+    /* ─── MOBILE HERO ─── */
+    .mobile-hero {
+      display: block;
+    }
+
+    .hero-image-wrap {
+      width: 100%;
+      height: 220px;
+      background: var(--gray-mid);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-image-wrap img,
+    .hero-image-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+    .hero-image-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--gray-mid) 0%, #c8cbe8 100%);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hero-content {
+      padding: 24px 20px 20px;
+    }
+    .hero-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero-title em {
+      color: var(--crimson);
+      font-style: normal;
+    }
+
+    /* Ad box */
+    .ad-box {
+      background: var(--gray-light);
+      border: 1.5px dashed var(--gray-mid);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-text {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* ─── DESKTOP HERO ─── */
+    .desktop-hero {
+      display: none;
+      min-height: calc(100vh - 60px);
+      position: relative;
+    }
+
+    /* Scroll overlay reveal section */
+    .reveal-section {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Sticky image layer */
+    .sticky-hero {
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .sticky-hero-left {
+  position: relative;
+  overflow: hidden;
+  max-height: calc(100vh - 60px);
+}
+
+    .sticky-hero-left .hero-image-placeholder {
+      height: 100%;
+      font-size: 1rem;
+    }
+
+    .sticky-hero-right {
+      padding: 40px 24px;
+      background: var(--white);
+      border-left: 1px solid var(--gray-mid);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .desktop-ad-box {
+      background: var(--gray-light);
+      border: 1.5px dashed var(--gray-mid);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Overlay reveal content */
+    .overlay-content {
+      position: relative;
+      z-index: 10;
+      margin-top: -100vh;
+      padding-top: calc(100vh - 60px);
+      pointer-events: none;
+    }
+
+    .reveal-card {
+      background: var(--white);
+      margin: 0;
+      padding: 80px 60px;
+      pointer-events: all;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-card .big-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .reveal-card .big-title em {
+      color: var(--crimson);
+      font-style: normal;
+    }
+    .reveal-card p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--blue);
+      color: var(--white);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    footer .footer-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--white); }
+    footer p {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (min-width: 768px) {
+      .hamburger { display: none; }
+      .mobile-hero { display: none; }
+      .desktop-hero { display: block; }
+      .nav-links { display: flex; }
+    }
+
+    @media (max-width: 767px) {
+      .desktop-hero { display: none; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-card { transition: none; opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <a HREF="nuevitologo.png" class="logo">
+      <!-- Lechuza SVG animada -->
+      <img src="nuevitologo.png" alt="Tareas la Lechuza" class="logo-svg" >
+        
+      <div class="logo-text">
+        Tareas la Lechuza
+        <span><strong>El Emperador de la Aprobacion</strong></span>
+      </div>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="calificacion.html">Calificación</a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ═══ VERSION TELEFONO ═══ -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">🏠 Inicio</a>
+    <a href="noticias.html">📰 Noticias</a>
+    <a href="contacto.html">📞 Contacto</a>
+    <a href="calificacion.html">⭐ Calificación</a>
+    <p class="menu-footer">Tareas la Lechuza © 2026</p>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <main>
+
+    <!-- ─── MOBILE VIEW ─── -->
+    <section class="mobile-hero">
+      <img src="lechuza emperador.png" alt="Imagen principal" 
+     style="width:100%; height:100%; object-fit:cover; display:block;" />
+
+      <div class="hero-content">
+                <!-- Google Ad placeholder -->
+        <div class="ad-box">
+          📢 Espacio para Google Ads<br/>
+          <small>Tu anuncio aparecerá aquí</small>
+        </div>
+
+<h1 class="hero-title">Tareas la <em>Lechuza</em></h1>
+
+        <p class="hero-text">
+          Sabemos que la vida universitaria no siempre es solo estudiar. Entre el trabajo, la familia y otras responsabilidades, a veces el tiempo no alcanza. En <strong>Tareas la Lechuza</strong> te damos el apoyo académico que necesitas para seguir adelante sin sacrificar lo que importa.
+        </p>
+        <div class="ad-box">
+          📢 Espacio para Google Ads<br/>
+          <small>Tu anuncio aparecerá aquí</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── DESKTOP VIEW ─── -->
+    <section class="desktop-hero">
+      <div class="reveal-section">
+
+        <!-- Sticky split layout -->
+        <div class="sticky-hero">
+          <div class="sticky-hero-left">
+            <div class="hero-image-placeholder">
+              <img src="anuncio.png" alt="Imagen principal" 
+             style="width:100%; height:100%; object-fit:cover; display:block;" />
+              <span style="font-size:1rem;color:#888;margin-top:11px;"></span>
+            </div>
+          </div>
+          <div class="sticky-hero-right">
+            <div class="desktop-ad-box">
+              📢 Google Ads<br/>
+              <small style="display:block;margin-top:6px;">Espacio publicitario</small>
+            </div>
+            <div class="desktop-ad-box">
+              📢 Google Ads<br/>
+              <small style="display:block;margin-top:6px;">Espacio publicitario</small>
+            </div>
+            <div class="desktop-ad-box">
+              📢 Google Ads<br/>
+              <small style="display:block;margin-top:6px;">Espacio publicitario</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overlay content that reveals on scroll -->
+        <div class="overlay-content">
+          <div class="reveal-card" id="revealCard1">
+            <h1 class="big-title">Tareas la <em>Lechuza</em></h1>
+            <p>
+              Sabemos que la vida universitaria no siempre es solo estudiar. 
+              Entre el trabajo, la familia y otras responsabilidades, 
+              a veces el tiempo no alcanza. En 
+              <strong>Tareas la Lechuza</strong> 
+              te damos el apoyo académico que necesitas para seguir 
+              adelante sin sacrificar lo que importa.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-links">
+      <a href="inicio.html">Inicio</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="calificacion.html">Calificación</a>
+    </div>
+    <p>© 2026 Tareas la Lechuza · Apoyo académico universitario</p>
+  </footer>
+
+  <script>
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    function toggleMenu() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      menuOverlay.classList.toggle('open');
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+
+    // Close menu when a link is clicked
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('open')) toggleMenu();
+      });
+    });
+
+    // Scroll overlay reveal (desktop)
+    const revealCards = document.querySelectorAll('.reveal-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealCards.forEach(card => observer.observe(card));
+  </script>
+</body>
+</html>

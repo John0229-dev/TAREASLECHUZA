@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto · Tareas la Lechuza</title>
+   <link rel="icon" type="image/x-icon" href="nuevitologo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #3A3EC8;
+      --blue-dark: #2a2e9e;
+      --red: #e53935;
+      --red-hover: #c62828;
+      --crimson: #e53935;
+      --white: #ffffff;
+      --gray-light: #f4f5fb;
+      --gray-mid: #e2e4f0;
+      --text: #1a1a2e;
+      --text-muted: #555570;
+    }
+
+    .favicon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--blue);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 12px rgba(58,62,200,0.3);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo img { width: 38px; height: 38px; object-fit: contain; }
+    .logo-text {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .logo-text span {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--crimson);
+      letter-spacing: 0.10em;
+    }
+    .nav-links { display: none; gap: 6px; }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.15); }
+    .nav-links a.active { background: rgba(255,255,255,0.22); }
+    .hamburger {
+      background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; gap: 5px; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── MOBILE MENU ─── */
+    .mobile-menu {
+      position: fixed; top: 60px; right: -100%;
+      width: 220px; height: calc(100vh - 60px);
+      background: var(--blue-dark); z-index: 99;
+      transition: right 0.3s ease;
+      display: flex; flex-direction: column;
+      padding: 30px 20px; gap: 8px;
+    }
+    .mobile-menu.open { right: 0; }
+    .mobile-menu a {
+      color: var(--white); text-decoration: none;
+      font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 500;
+      padding: 12px 16px; border-radius: 10px; transition: background 0.2s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active { background: rgba(255,255,255,0.15); }
+    .menu-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4); z-index: 98;
+    }
+    .menu-overlay.open { display: block; }
+
+    /* ─── MAIN ─── */
+    main { padding-top: 60px; }
+
+    /* ══════════════════════════════
+       MOBILE LAYOUT
+    ══════════════════════════════ */
+    .mobile-view { display: block; padding: 28px 20px; }
+    .desktop-view { display: none; }
+
+    .page-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+    .page-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* Formulario */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .field-group label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.03em;
+    }
+    .field-group input,
+    .field-group select,
+    .field-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-mid);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-group input:focus,
+    .field-group select:focus,
+    .field-group textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(58,62,200,0.1);
+    }
+    .field-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Botón enviar */
+    .btn-enviar {
+      width: 100%;
+      padding: 13px;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.02em;
+    }
+    .btn-enviar:hover { background: var(--red-hover); }
+    .btn-enviar:active { transform: scale(0.98); }
+    .btn-enviar:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Toast notificación */
+    .toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a1a2e;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      z-index: 200;
+      transition: transform 0.35s ease;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { background: #2e7d32; }
+    .toast.error { background: var(--red); }
+
+    /* Ad mobile (debajo del form) */
+    .ad-mobile {
+      margin-top: 28px;
+      background: var(--gray-light);
+      border: 1.5px dashed var(--gray-mid);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════
+       DESKTOP LAYOUT
+    ══════════════════════════════ */
+    @media (min-width: 768px) {
+      .hamburger { display: none; }
+      .mobile-view { display: none; }
+      .desktop-view { display: block; }
+      .nav-links { display: flex; }
+    }
+
+    .desktop-layout {
+      display: grid;
+      grid-template-columns: 1fr 480px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 60px);
+      align-items: start;
+      padding: 40px 0;
+    }
+
+    /* Columnas laterales de anuncios */
+    .ad-column {
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .ad-block {
+      background: var(--gray-light);
+      border: 1.5px dashed var(--gray-mid);
+      border-radius: 10px;
+      min-height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 12px;
+    }
+
+    /* Columna central: formulario */
+    .form-column {
+      padding: 40px 32px;
+      border-left: 1px solid var(--gray-mid);
+      border-right: 1px solid var(--gray-mid);
+    }
+
+    .desktop-page-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+    .desktop-page-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--blue);
+      color: var(--white);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    footer .footer-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--white); }
+    footer p { font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <a href="nuevitologo.png" class="logo">
+      <img src="nuevitologo.png" alt="Tareas la Lechuza" />
+      <div class="logo-text">
+        Tareas la Lechuza
+       <span><strong>El Emperador de la Aprobacion</strong></span>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="contacto.html" class="active">Contacto</a>
+      <a href="calificacion.html">Calificación</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">🏠 Inicio</a>
+    <a href="noticias.html">📰 Noticias</a>
+    <a href="contacto.html" class="active">📞 Contacto</a>
+    <a href="calificacion.html">⭐ Calificación</a>
+    <p style="margin-top:auto;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center;">Tareas la Lechuza © 2026</p>
+  </nav>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══ MAIN ═══ -->
+  <main>
+
+    <!-- ══ MOBILE ══ -->
+    <div class="mobile-view">
+      <h1 class="page-title">Contáctanos</h1>
+      <p class="page-subtitle">Llena el formulario y te respondemos pronto.</p>
+
+      <form class="contact-form" id="contactFormMobile">
+        <div class="field-group">
+          <label for="nombre_m">Nombre completo</label>
+          <input type="text" id="nombre_m" name="nombre" placeholder="Tu nombre" required />
+        </div>
+        <div class="field-group">
+          <label for="correo_m">Correo electrónico</label>
+          <input type="email" id="correo_m" name="correo" placeholder="tucorreo@ejemplo.com" required />
+        </div>
+        <div class="field-group">
+          <label for="materia_m">Materia</label>
+          <input type="text" id="materia_m" name="materia" placeholder="Ej: Cálculo I, Programación..." required />
+        </div>
+        <div class="field-group">
+          <label for="descripcion_m">Descripción</label>
+          <textarea id="descripcion_m" name="descripcion" placeholder="Explica en qué necesitas ayuda..." required></textarea>
+        </div>
+        <button type="submit" class="btn-enviar" id="btnMobile">Enviar mensaje</button>
+      </form>
+
+      <!-- Google Ad mobile -->
+      <div class="ad-mobile">
+        📢 Google Ads · Espacio publicitario
+      </div>
+    </div>
+
+    <!-- ══ DESKTOP ══ -->
+    <div class="desktop-view">
+      <div class="desktop-layout">
+
+        <!-- Anuncios izquierda (2) -->
+        <div class="ad-column">
+          <div class="ad-block">📢 Google Ads<br/><small>Anuncio 1</small></div>
+          <div class="ad-block">📢 Google Ads<br/><small>Anuncio 2</small></div>
+        </div>
+
+        <!-- Formulario central -->
+        <div class="form-column">
+          <h1 class="desktop-page-title">Contáctanos</h1>
+          <p class="desktop-page-subtitle">Llena el formulario y te respondemos pronto.</p>
+
+          <form class="contact-form" id="contactFormDesktop">
+            <div class="field-group">
+              <label for="nombre_d">Nombre completo</label>
+              <input type="text" id="nombre_d" name="nombre" placeholder="Tu nombre" required />
+            </div>
+            <div class="field-group">
+              <label for="correo_d">Correo electrónico</label>
+              <input type="email" id="correo_d" name="correo" placeholder="tucorreo@ejemplo.com" required />
+            </div>
+            <div class="field-group">
+              <label for="materia_d">Materia</label>
+              <input type="text" id="materia_d" name="materia" placeholder="Ej: Cálculo I, Programación..." required />
+            </div>
+            <div class="field-group">
+              <label for="descripcion_d">Descripción</label>
+              <textarea id="descripcion_d" name="descripcion" placeholder="Explica en qué necesitas ayuda..." required></textarea>
+            </div>
+            <button type="submit" class="btn-enviar" id="btnDesktop">Enviar mensaje</button>
+          </form>
+        </div>
+
+        <!-- Anuncios derecha (2) -->
+        <div class="ad-column">
+          <div class="ad-block">📢 Google Ads<br/><small>Anuncio 3</small></div>
+          <div class="ad-block">📢 Google Ads<br/><small>Anuncio 4</small></div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="calificacion.html">Calificación</a>
+    </div>
+    <p>© 2026 Tareas la Lechuza · Apoyo académico universitario</p>
+  </footer>
+
+  <script>
+    // ════════════════════════════════
+    // CONFIGURACIÓN EMAILJS
+    // Reemplaza estos 3 valores con los de tu cuenta EmailJS
+    // ════════════════════════════════
+    const EMAILJS_PUBLIC_KEY  = "bA_CHy2gkl98XTKuZ";   // Account > API Keys
+    const EMAILJS_SERVICE_ID  = "service_zsrmbeh";   // Email Services > Service ID
+    const EMAILJS_TEMPLATE_ID = "template_49w2y0e";  // Email Templates > Template ID
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    // ─── Hamburger ───
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+    function toggleMenu() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      menuOverlay.classList.toggle('open');
+    }
+    hamburger.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+    mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('open')) toggleMenu();
+    }));
+
+    // ─── Toast ───
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast ' + type;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ─── Envío del formulario ───
+    function handleSubmit(e, btnId) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById(btnId);
+
+      // Leer campos
+      const templateParams = {
+        nombre:      form.querySelector('[name="nombre"]').value.trim(),
+        correo:      form.querySelector('[name="correo"]').value.trim(),
+        materia:     form.querySelector('[name="materia"]').value.trim(),
+        descripcion: form.querySelector('[name="descripcion"]').value.trim(),
+      };
+
+      // Deshabilitar botón mientras envía
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(() => {
+          showToast('✅ Mensaje enviado. ¡Te responderemos pronto!', 'success');
+          form.reset();
+        })
+        .catch((err) => {
+          console.error('EmailJS error:', err);
+          showToast('❌ Error al enviar. Intenta de nuevo.', 'error');
+        })
+        .finally(() => {
+          btn.disabled = false;
+          btn.textContent = 'Enviar mensaje';
+        });
+    }
+    
+
+    document.getElementById('contactFormMobile').addEventListener('submit', e => handleSubmit(e, 'btnMobile'));
+    document.getElementById('contactFormDesktop').addEventListener('submit', e => handleSubmit(e, 'btnDesktop'));
+  </script>
+</body>
+</html>

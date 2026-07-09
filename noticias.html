@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noticias · Tareas la Lechuza</title>
+  <link rel="icon" type="image/x-icon" href="nuevitologo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #3A3EC8;
+      --blue-dark: #2a2e9e;
+      --crimson: #dc2828;
+      --white: #ffffff;
+      --gray-light: #1a1b20;
+      --gray-mid: #e2e4f0;
+      --text: #1a1a2e;
+      --text-muted: #555570;
+    }
+
+.favicon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--blue);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 12px rgba(58,62,200,0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo img, .logo-svg { width: 38px; height: 38px; object-fit: contain; }
+    .logo-text {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .logo-text span {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--crimson);
+      letter-spacing: 0.10em;
+    }
+
+    .nav-links {
+      display: none;
+      gap: 6px;
+    }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.15); }
+    .nav-links a.active { background: rgba(255,255,255,0.22); }
+
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── MOBILE MENU ─── */
+    .mobile-menu {
+      position: fixed;
+      top: 60px; right: -100%;
+      width: 220px;
+      height: calc(100vh - 60px);
+      background: var(--blue-dark);
+      z-index: 99;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      gap: 8px;
+    }
+    .mobile-menu.open { right: 0; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 12px 16px;
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active { background: rgba(255,255,255,0.15); }
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 98;
+    }
+    .menu-overlay.open { display: block; }
+
+    /* ─── MAIN ─── */
+    main { padding-top: 60px; }
+
+    /* ══════════════════════════════
+       MOBILE LAYOUT
+    ══════════════════════════════ */
+    .mobile-view { display: block; }
+    .desktop-view { display: none; }
+
+    /* Carrusel */
+    .carousel-wrap {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: var(--gray-mid);
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.45s ease;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      height: 220px;
+      background: var(--gray-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-slide .slide-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+    }
+    .carousel-slide .slide-label {
+      position: absolute;
+      bottom: 10px; left: 12px;
+      background: rgba(58,62,200,0.8);
+      color: white;
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(58,62,200,0.75);
+      border: none;
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 5;
+    }
+    .carousel-btn:hover { background: var(--blue); }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 0 6px;
+      background: var(--white);
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gray-mid);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .dot.active { background: var(--blue); }
+
+    /* Video section */
+    .video-section {
+      padding: 20px;
+      background: var(--gray-light);
+      border-top: 1px solid var(--gray-mid);
+    }
+    .section-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+    .video-box {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #1a1a2e;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+    }
+    .video-box .closed-icon {
+      font-size: 2.2rem;
+    }
+    .video-box.has-video {
+      padding: 0;
+      overflow: hidden;
+    }
+    .video-box iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    }
+
+    /* Noticias list */
+    .noticias-section {
+      padding: 24px 20px;
+    }
+    .noticias-section .section-label {
+      margin-bottom: 16px;
+    }
+
+    /* Mobile: noticias como cards */
+    .noticias-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .noticia-card {
+      background: var(--white);
+      border: 1px solid var(--gray-mid);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .noticia-card:hover {
+      box-shadow: 0 4px 16px rgba(58,62,200,0.1);
+      border-color: var(--blue);
+    }
+    .noticia-num {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--gray-mid);
+      min-width: 36px;
+    }
+    .noticia-info h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .noticia-info p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .noticia-arrow {
+      margin-left: auto;
+      color: var(--blue);
+      font-size: 1rem;
+    }
+
+    /* ══════════════════════════════
+       DESKTOP LAYOUT
+    ══════════════════════════════ */
+    @media (min-width: 768px) {
+      .hamburger { display: none; }
+      .mobile-view { display: none; }
+      .desktop-view { display: block; }
+      .nav-links { display: flex; }
+    }
+
+    .desktop-content {
+      padding: 36px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Top row: carrusel + video lado a lado */
+    .desktop-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .desktop-carousel-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--gray-mid);
+    }
+    .desktop-carousel-wrap .carousel-slide {
+      height: 280px;
+    }
+
+    .desktop-video-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .desktop-video-wrap .section-label {
+      margin-bottom: 4px;
+    }
+    .desktop-video-box {
+      flex: 1;
+      background: #1a1a2e;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      min-height: 260px;
+    }
+    .desktop-video-box .closed-icon { font-size: 2.5rem; }
+
+    /* Noticias table */
+    .desktop-noticias {
+      background: var(--white);
+      border: 1px solid var(--gray-mid);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .desktop-noticias .table-header {
+      background: var(--crimson);
+      color: white;
+      display: grid;
+      grid-template-columns: 60px 1fr 160px 100px;
+      padding: 12px 20px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .noticia-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 160px 100px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--gray-mid);
+      align-items: center;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .noticia-row:last-child { border-bottom: none; }
+    .noticia-row:hover { background: var(--gray-light); }
+    .noticia-row .num {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      color: var(--blue);
+      font-size: 0.9rem;
+    }
+    .noticia-row .titulo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .noticia-row .fecha {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .noticia-row .estado {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-align: center;
+      width: fit-content;
+    }
+    .estado.nuevo { background: #e8f5e9; color: #2e7d32; }
+    .estado.reciente { background: #e3f2fd; color: #1565c0; }
+    .estado.anterior { background: var(--gray-light); color: var(--text-muted); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--blue);
+      color: var(--white);
+      padding: 32px 24px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    footer .footer-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--white); }
+    footer p { font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .carousel-track { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <a href="nuevitologo.png" class="logo">
+      <img src="nuevitologo.png" alt="Tareas la Lechuza" class="logo-svg" />
+      <div class="logo-text">
+        Tareas la Lechuza
+        <span><strong>El Emperador de la Aprobacion</strong></span>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="noticias.html" class="active">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="calificacion.html">Calificación</a>
+    </nav>
+
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">🏠 Inicio</a>
+    <a href="noticias.html" class="active">📰 Noticias</a>
+    <a href="contacto.html">📞 Contacto</a>
+    <a href="calificacion.html">⭐ Calificación</a>
+    <p style="margin-top:auto;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center;">Tareas la Lechuza © 2026</p>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <main>
+
+    <!-- ══════════════════════════════
+         MOBILE VIEW
+    ══════════════════════════════ -->
+    <div class="mobile-view">
+
+      <!-- Carrusel -->
+<div class="carousel-wrap" id="mobileCarousel">
+  <div class="carousel-track" id="mobileTrack">
+    <div class="carousel-slide">
+      <img src="NOT1.png" alt="Noticia 1" style="width:100%;height:100%;object-fit:cover;"/>
+      <span class="slide-label">Título foto 1</span>
+    </div>
+    <div class="carousel-slide">
+      <img src="NOT2.png" alt="Noticia 2" style="width:100%;height:100%;object-fit:cover;"/>
+      <span class="slide-label">Título foto 2</span>
+    </div>
+    <div class="carousel-slide">
+      <img src="NOT3.jpg" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
+      <span class="slide-label">Título foto 3</span>
+    </div>
+  </div>
+  <button class="carousel-btn prev" onclick="moveCarousel('mobile', -1)">‹</button>
+  <button class="carousel-btn next" onclick="moveCarousel('mobile', 1)">›</button>
+</div>
+<div class="carousel-dots" id="mobileDots">
+  <div class="dot active" onclick="goToSlide('mobile', 0)"></div>
+  <div class="dot" onclick="goToSlide('mobile', 1)"></div>
+  <div class="dot" onclick="goToSlide('mobile', 2)"></div>
+</div>
+      
+      <!-- Video -->
+      <div class="video-section">
+        <p class="section-label">📹 Video</p>
+        <div class="video-box">
+          <span class="closed-icon">🔒</span>
+          <span>Sección cerrada</span>
+          <small style="font-size:0.72rem;opacity:0.6;">No hay video disponible por ahora</small>
+        </div>
+      </div>
+    <!-- PEGAR ESTO SI HAY VIDEO QUE MOSTRAR EN ANDROID
+     
+    <div class="video-box has-video">
+  <<video src="COLOCAR EL VIDEO AQUI" 
+          allowfullscreen></video>
+</div>
+SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
+<div class="video-box">
+          <span class="closed-icon">🔒</span>
+          <span>Sección cerrada</span>
+          <small style="font-size:0.72rem;opacity:0.6;">No hay video disponible por ahora</small>
+        </div>
+
+          Y SI HAY DEBES BORRAR ESO Y COLOCAR EL CODIGO DE ARRIBA Y DESPUES REGRREAR ESE CODIGO
+-->
+
+      <!-- Noticias version MOVIL-->
+      <div class="noticias-section">
+        <p class="section-label">📋 Noticias</p>
+        <div class="noticias-list">
+          <a class="noticia-card" >
+            <span class="noticia-num">1</span>
+            <div class="noticia-info">
+              <h3>Noticia 1</h3>
+              <p>Ignaoguracion de la pagina web</p>
+            </div>
+            <span class="noticia-arrow">›</span>
+          </a>
+          <a class="noticia-card" >
+            <span class="noticia-num">2</span>
+            <div class="noticia-info">
+              <h3>Noticia 2</h3>
+              <p>servicio academico mas fortificado, pagina web, puedes conocer sobre la lechuza</p>
+            </div>
+            <span class="noticia-arrow">›</span>
+          </a>
+          <a class="noticia-card" >
+            <span class="noticia-num">3</span>
+            <div class="noticia-info">
+              <h3>Noticia 3</h3>
+              <p>servicio se abre a partir de agosto</p>
+            </div>
+            <span class="noticia-arrow">›</span>
+          </a>
+          <a class="noticia-card" >
+            <span class="noticia-num">4</span>
+            <div class="noticia-info">
+              <h3>Noticia 4</h3>
+              <p>¡FRANCIA CASI EN LA FINAL! tareas y actividades totalmente GRATIS para mes de agosto si el equipo frances levanta su tercera copa</p>
+            </div>
+            <span class="noticia-arrow">›</span>
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /mobile-view -->
+
+
+    <!-- ══════════════════════════════
+         DESKTOP Version
+    ══════════════════════════════ -->
+    <div class="desktop-view">
+      <div class="desktop-content">
+
+        <!-- Top: carrusel + video -->
+        <div class="desktop-top">
+         
+<!-- Carrusel desktop -->
+<div>
+  <p class="section-label">🖼️ Galería de fotos</p>
+  <div class="desktop-carousel-wrap" id="desktopCarousel">
+    <div class="carousel-track" id="desktopTrack">
+      <div class="carousel-slide">
+        <img src="NOT1.png" alt="Noticia 1" style="width:100%;height:100%;object-fit:cover;"/>
+       
+      </div>
+      <div class="carousel-slide">
+        <img src="NOT2.png" alt="Noticia 2" style="width:100%;height:100%;object-fit:cover;"/>
+        
+      </div>
+      <div class="carousel-slide">
+        <img src="NOT3.jpg" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
+        
+      </div>
+    </div>
+    <button class="carousel-btn prev" onclick="moveCarousel('desktop', -1)">‹</button>
+    <button class="carousel-btn next" onclick="moveCarousel('desktop', 1)">›</button>
+  </div>
+  <div class="carousel-dots" id="desktopDots">
+    <div class="dot active" onclick="goToSlide('desktop', 0)"></div>
+    <div class="dot" onclick="goToSlide('desktop', 1)"></div>
+    <div class="dot" onclick="goToSlide('desktop', 2)"></div>
+  </div>
+</div>
+
+          <!-- Video desktop -->
+          <div class="desktop-video-wrap">
+            <p class="section-label">📹 Video</p>
+            <div class="desktop-video-box">
+              <span class="closed-icon">🔒</span>
+              <span>Sección cerrada</span>
+              <small style="font-size:0.78rem;opacity:0.6;">No hay video disponible por ahora</small>
+            </div>
+          </div>
+
+        </div><!-- /desktop-top -->
+        
+<!-- PEGAR ESTO SI HAY VIDEO QUE MOSTRAR EN DESKTOP
+     
+    <div class="desktop-video-box has-video">
+  <video src="PEGAR EL VIDEO AQUI" 
+          allowfullscreen></video>
+</div>
+
+SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
+div class="desktop-video-box">
+              <span class="closed-icon">🔒</span>
+              <span>Sección cerrada</span>
+              <small style="font-size:0.78rem;opacity:0.6;">No hay video disponible por ahora</small>
+            </div>
+
+          Y SI HAY DEBES BORRAR ESO Y COLOCAR EL CODIGO DE ARRIBA Y DESPUES REGRREAR ESE CODIGO
+-->
+
+
+        <!-- Tabla de noticias LEER ABAJO DE LA TABLA -->
+        <p class="section-label">📋 Noticias</p>
+        <div class="desktop-noticias">
+          <div class="table-header">
+            <span>#</span>
+            <span>Título</span>
+            <span>Fecha</span>
+            <span>Estado</span>
+          </div>
+          <div class="noticia-row">
+            <span class="num">#1</span>
+            <span class="titulo">Ignaoguracion de la pagina web</span>
+            <span class="fecha">15 julio 2026</span>
+            <span class="estado nuevo">Nuevo</span>
+          </div>
+          <div class="noticia-row">
+            <span class="num">#2</span>
+            <span class="titulo">Servicio academico fortificado, pagina web, pueden conocer sobre la lechuza</span>
+            <span class="fecha">15 julio 2026</span>
+            <span class="estado nuevo">nuevo</span>
+          </div>
+          <div class="noticia-row">
+            <span class="num">#3</span>
+            <span class="titulo">Servicio se abre a partir de agosto</span>
+            <span class="fecha">15 julio 2026</span>
+            <span class="estado nuevo">nuevo</span>
+          </div>
+          <div class="noticia-row">
+            <span class="num">#4</span>
+            <span class="titulo">¡FRANCIA EN LA FINAL! tareas y actividades totalmente GRATIS para mes de agosto si el equipo frances levanta su tercera copa</span>
+            <span class="fecha">15 julio 2026</span>
+            <span class="estado nuevo">nuevo</span>
+          </div>
+        </div>
+        <!-- /IMPORTANTE
+         EN SPAN CLASS="estado ..." reemplazar por las palabras "nuevo", "reciente" o "anterior" (ESTO PARA MANTENER ACTIVA LA WEB)-->
+
+<!-- ESTE PEDAZO DE CODIGO DEBES COPIARLO PARA GENERAR NUEVAS NOTICIAS EN LA TABLA DE DESKTOP
+         
+<div class="noticia-row">
+            <span class="num">TAL NUMERO</span>
+            <span class="titulo">TAL NOTICIA/span>
+            <span class="fecha">TAL FECHA</span>
+            <span class="estado (REMPLAZAR)">REEMPLAZAR TAMBIEN</span>
+          </div>
+        </div>
+        
+        DESBES COPAR ESE CODIGO PARA GENERAR NUEVAS NOTICIAS-->
+
+      </div>
+    </div><!-- /desktop-view -->
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-links">
+      <a href="inicio.html">Inicio</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="calificacion.html">Calificación</a>
+    </div>
+    <p>© 2026 Tareas la Lechuza · Apoyo académico universitario</p>
+  </footer>
+
+  <script>
+    // ─── Hamburger ───
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+    function toggleMenu() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      menuOverlay.classList.toggle('open');
+    }
+    hamburger.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+    mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('open')) toggleMenu();
+    }));
+
+    // ─── Carrusel ───
+    const carousels = {
+      mobile: { current: 0, total: 3 },
+      desktop: { current: 0, total: 3 }
+    };
+
+    function moveCarousel(id, dir) {
+      const c = carousels[id];
+      c.current = (c.current + dir + c.total) % c.total;
+      updateCarousel(id);
+    }
+
+    function goToSlide(id, index) {
+      carousels[id].current = index;
+      updateCarousel(id);
+    }
+
+    function updateCarousel(id) {
+      const c = carousels[id];
+      const track = document.getElementById(id + 'Track');
+      const dots = document.getElementById(id + 'Dots').querySelectorAll('.dot');
+      track.style.transform = `translateX(-${c.current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === c.current));
+    }
+
+    // Auto-play
+    setInterval(() => moveCarousel('mobile', 1), 4000);
+    setInterval(() => moveCarousel('desktop', 1), 4000);
+  </script>
+</body>
+</html>
