@@ -316,7 +316,7 @@
       font-family: 'Poppins', sans-serif;
       font-size: 1.4rem;
       font-weight: 800;
-      color: var(--gray-mid);
+      color: var(--crimson);
       min-width: 36px;
     }
     .noticia-info h3 {
@@ -398,7 +398,11 @@
       border: 1px solid var(--gray-mid);
       border-radius: 12px;
       overflow: hidden;
-    }
+      max-height: 400px;      
+  overflow-y: auto;
+  display: block;
+      }
+
     .desktop-noticias .table-header {
       background: var(--crimson);
       color: white;
@@ -523,16 +527,18 @@
   <div class="carousel-track" id="mobileTrack">
     <div class="carousel-slide">
       <img src="NOT1.png" alt="Noticia 1" style="width:100%;height:100%;object-fit:cover;"/>
-    
     </div>
     <div class="carousel-slide">
       <img src="not2.png" alt="Noticia 2" style="width:100%;height:100%;object-fit:cover;"/>
-      
     </div>
     <div class="carousel-slide">
-      <img src="NOT3.jpg" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
-      
+      <img src="NOT3.png" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
     </div>
+        <!-- ANEXAR ESTA ETIQUETA HTML PARA NUEVAS IMAGENES DE NOTICIAS EN ANDROID
+    <div class="carousel-slide">
+      <img src="NOT4.jpg" alt="Noticia (REEMPLAZAR CON NUMERO MISMO SUCESOR)" style="width:100%;height:100%;object-fit:cover;"/>
+    </div> -->
+
   </div>
   <button class="carousel-btn prev" onclick="moveCarousel('mobile', -1)">‹</button>
   <button class="carousel-btn next" onclick="moveCarousel('mobile', 1)">›</button>
@@ -541,6 +547,9 @@
   <div class="dot active" onclick="goToSlide('mobile', 0)"></div>
   <div class="dot" onclick="goToSlide('mobile', 1)"></div>
   <div class="dot" onclick="goToSlide('mobile', 2)"></div>
+ 
+  <!--ANEXAR ESTE COGIDO PARA AUMENTAR EL CARUSEL PERO EN ORDEN DE 0 AL SIGUIENTE NUMERO NO DE 1 AL SIGUIENTE OSEA SE RESTA UNO
+    <div class="dot" onclick="goToSlide('mobile', REMPLAZAR NUMERO SUCESOR SEGUN EL ANTERIOR)"></div>-->
 </div>
       
       <!-- Video -->
@@ -600,14 +609,35 @@ SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
             <span class="noticia-num">4</span>
             <div class="noticia-info">
               <h3>Noticia 4</h3>
-              <p>¡FRANCIA VALIO MADRES! tareas y actividades al 50% si gana el tercer lugar, si queda en 4°, queda al 25% de descuento en todas las actividades. Valido en el mes de "AGOSTO" no se pudo levantar su tercera copa</p>
+              <p>¡FRANCIA valio madres! Quiniela Coronada, se abre la quiniela Coronada, indicaciones en mi perfil de Facebook</p>
+            </div>
+            <span class="noticia-arrow">›</span>
+          </a>
+          <a class="noticia-card" >
+            <span class="noticia-num">5</span>
+            <div class="noticia-info">
+              <h3>Noticia 5</h3>
+              <p> Quiniela Coronada, se abre la quiniela Coronada, indicaciones en mi perfil de Facebook</p>
             </div>
             <span class="noticia-arrow">›</span>
           </a>
         </div>
       </div>
+    </div>
 
-    </div><!-- /mobile-view -->
+<!--- ANEXAR NUEVAS NOTICIAS EN ANDROID
+
+<a class="noticia-card" >
+            <span class="noticia-num">5</span>
+            <div class="noticia-info">
+              <h3>Noticia 5</h3>
+              <p> Quiniela Coronada, se abre la quiniela Coronada, indicaciones en mi perfil de Facebook</p>
+            </div>
+            <span class="noticia-arrow">›</span>
+          </a> -->
+
+    
+    <!-- /mobile-view -->
 
 
     <!-- ══════════════════════════════
@@ -633,9 +663,19 @@ SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
         
       </div>
       <div class="carousel-slide">
-        <img src="NOT3.jpg" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
+        <img src="NOT3.png" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
         
       </div>
+     
+      
+
+      <!-- ANEXAR ESTA ETIQUETA HTML PARA NUEVAS IMAGENES DE NOTICIAS EN DESKTOP
+    <div class="carousel-slide">
+        <img src="NOT3.jpg" alt="Noticia (REEMPLAZAR POR NUMERO SUCESOR)" style="width:100%;height:100%;object-fit:cover;"/>
+        
+      </div> 
+      
+      Y EDITAR EL SCRIPT PARA QUE SE VA LA NUEVA IMAGEN. BUSCA EL CODIGO DE JAVASCRIPT DEL CARRUSEL Y EDITALO-->
     </div>
     <button class="carousel-btn prev" onclick="moveCarousel('desktop', -1)">‹</button>
     <button class="carousel-btn next" onclick="moveCarousel('desktop', 1)">›</button>
@@ -644,6 +684,9 @@ SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
     <div class="dot active" onclick="goToSlide('desktop', 0)"></div>
     <div class="dot" onclick="goToSlide('desktop', 1)"></div>
     <div class="dot" onclick="goToSlide('desktop', 2)"></div>
+    <div class="dot" onclick="goToSlide('desktop', 3)"></div>
+    <!--ANEXAR ESTE COGIDO PARA AUMENTAR EL CARUSEL PERO EN ORDEN DE 0 AL SIGUIENTE NUMERO NO DE 1 AL SIGUIENTE OSEA SE RESTA UNO
+    <div class="dot" onclick="goToSlide('desktop', REMPLAZAR NUMERO SUCESOR SEGUN EL ANTERIOR)"></div>-->
   </div>
 </div>
 
@@ -706,12 +749,19 @@ div class="desktop-video-box">
           </div>
           <div class="noticia-row">
             <span class="num">#4</span>
-            <span class="titulo">¡FRANCIA VALIO MADRES! tareas y actividades al 50% si gana el tercer lugar, si queda en 4°, queda al 25% de descuento en todas las actividades. Valido en el mes de "AGOSTO" no se pudo levantar su tercera copa</span>
+            <span class="titulo">¡FRANCIA valio madres!</span>
             <span class="fecha">15 julio 2026</span>
-            <span class="estado nuevo">nuevo</span>
+            <span class="estado anterior">anterior</span>
+          </div>
+          <div class="noticia-row">
+            <span class="num">#5</span>
+            <span class="titulo">Quiniela Coronada, se abre la quiniela Coronada, indicaciones en mi perfil de Facebook</span>
+            <span class="fecha">17 Julio 2026</span>
+            <span class="estado reciente">reciente</span>
           </div>
         </div>
         
+        </div>
         <!-- /IMPORTANTE
          EN SPAN CLASS="estado ..." reemplazar por las palabras "nuevo", "reciente" o "anterior" (ESTO PARA MANTENER ACTIVA LA WEB)-->
 
@@ -763,6 +813,7 @@ div class="desktop-video-box">
     const carousels = {
       mobile: { current: 0, total: 3 },
       desktop: { current: 0, total: 3 }
+      //EDITAR EL NUMERO TOTAL DE IMAGENES DEL CARRUSEL, SI HAY 5 IMAGENES, CAMBIAR EL NUMERO 4 POR EL 5 Y ASI
     };
 
     function moveCarousel(id, dir) {
