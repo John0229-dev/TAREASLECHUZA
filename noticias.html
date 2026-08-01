@@ -526,13 +526,13 @@
 <div class="carousel-wrap" id="mobileCarousel">
   <div class="carousel-track" id="mobileTrack">
     <div class="carousel-slide">
-      <img src="NOT1.png" alt="Noticia 1" style="width:100%;height:100%;object-fit:cover;"/>
+      <img src="NOTO1.png" alt="Noticia 1" style="width:100%;height:100%;object-fit:cover;"/>
     </div>
     <div class="carousel-slide">
-      <img src="not2.png" alt="Noticia 2" style="width:100%;height:100%;object-fit:cover;"/>
+      <img src="noto2.png" alt="Noticia 2" style="width:100%;height:100%;object-fit:cover;"/>
     </div>
     <div class="carousel-slide">
-      <img src="NOT3.png" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
+      <img src="add2.png" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
     </div>
         <!-- ANEXAR ESTA ETIQUETA HTML PARA NUEVAS IMAGENES DE NOTICIAS EN ANDROID
     <div class="carousel-slide">
@@ -554,20 +554,21 @@
       
       <!-- Video -->
       <div class="video-section">
-        <p class="section-label">📹 Video</p>
-        <div class="video-box">
-          <span class="closed-icon">🔒</span>
-          <span>Sección cerrada</span>
-          <small style="font-size:0.72rem;opacity:0.6;">No hay video disponible por ahora</small>
-        </div>
+        <div class="video-box has-video">
+  <video controls style="width:100%;height:100%;border-radius:10px;">
+    <source src="video.mp4" type="video/mp4">
+  </video>
+</div>
       </div>
     <!-- PEGAR ESTO SI HAY VIDEO QUE MOSTRAR EN ANDROID
      
     <div class="video-box has-video">
-  <<video src="COLOCAR EL VIDEO AQUI" 
+  <video src="COLOCAR EL VIDEO AQUI" 
           allowfullscreen></video>
 </div>
+
 SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
+
 <div class="video-box">
           <span class="closed-icon">🔒</span>
           <span>Sección cerrada</span>
@@ -609,7 +610,7 @@ SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
             <span class="noticia-num">4</span>
             <div class="noticia-info">
               <h3>Noticia 4</h3>
-              <p>¡FRANCIA valio madres! Francia fue vencida por España con un resultado de Francia 0-2 España.</p>
+              <p>¡FRANCIA valio madres! Quiniela Coronada, se abre la quiniela Coronada, indicaciones en mi perfil de Facebook</p>
             </div>
             <span class="noticia-arrow">›</span>
           </a>
@@ -622,10 +623,18 @@ SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
             <span class="noticia-arrow">›</span>
           </a>
           <a class="noticia-card" >
-            <span class="noticia-num">5</span>
+            <span class="noticia-num">6</span>
             <div class="noticia-info">
               <h3>Noticia 6</h3>
-              <p> ¡Francia Tercer lugar! hoy Francia queda como tercer lugar (si es que puedan) si queda en tercero, actividades quedan al 50% de descuento durante el mes de agosto</p>
+              <p> Felices Vacaciones, Tareas lechuza tomara tambien vacaciones antes de arrancar de lleno en lo que queda del ciclo II 26</p>
+            </div>
+            <span class="noticia-arrow">›</span>
+          </a>
+          <a class="noticia-card" >
+            <span class="noticia-num">7</span>
+            <div class="noticia-info">
+              <h3>Noticia 7</h3>
+              <p> Agosto al 25% estara viegente desde el 01 al 30 de este mes</p>
             </div>
             <span class="noticia-arrow">›</span>
           </a>
@@ -663,15 +672,15 @@ SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
   <div class="desktop-carousel-wrap" id="desktopCarousel">
     <div class="carousel-track" id="desktopTrack">
       <div class="carousel-slide">
-        <img src="NOT1.png" alt="Noticia 1" style="width:100%;height:100%;object-fit:cover;"/>
+        <img src="NOTO1.png" alt="Noticia 1" style="width:100%;height:100%;object-fit:cover;"/>
        
       </div>
       <div class="carousel-slide">
-        <img src="not2.png" alt="Noticia 2" style="width:100%;height:100%;object-fit:cover;"/>
+        <img src="noto2.png" alt="Noticia 2" style="width:100%;height:100%;object-fit:cover;"/>
         
       </div>
       <div class="carousel-slide">
-        <img src="NOT3.png" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
+        <img src="add2.png" alt="Noticia 3" style="width:100%;height:100%;object-fit:cover;"/>
         
       </div>
      
@@ -692,33 +701,32 @@ SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
     <div class="dot active" onclick="goToSlide('desktop', 0)"></div>
     <div class="dot" onclick="goToSlide('desktop', 1)"></div>
     <div class="dot" onclick="goToSlide('desktop', 2)"></div>
-   
+  
     <!--ANEXAR ESTE COGIDO PARA AUMENTAR EL CARUSEL PERO EN ORDEN DE 0 AL SIGUIENTE NUMERO NO DE 1 AL SIGUIENTE OSEA SE RESTA UNO
     <div class="dot" onclick="goToSlide('desktop', REMPLAZAR NUMERO SUCESOR SEGUN EL ANTERIOR)"></div>-->
   </div>
 </div>
 
           <!-- Video desktop -->
-          <div class="desktop-video-wrap">
-            <p class="section-label">📹 Video</p>
-            <div class="desktop-video-box">
-              <span class="closed-icon">🔒</span>
-              <span>Sección cerrada</span>
-              <small style="font-size:0.78rem;opacity:0.6;">No hay video disponible por ahora</small>
-            </div>
-          </div>
+            <div class="desktop-video-box has-video">
+
+  <div class="desktop-video-box has-video">
+  <video controls style="width:100%;height:100%;border-radius:12px;">
+    <source src="video.mp4" type="video/mp4">
+  </video>
+</div>
+</div>
 
         </div><!-- /desktop-top -->
         
 <!-- PEGAR ESTO SI HAY VIDEO QUE MOSTRAR EN DESKTOP
      
     <div class="desktop-video-box has-video">
-  <video src="PEGAR EL VIDEO AQUI" 
-          allowfullscreen></video>
+  <video src="PEGAR EL VIDEO AQUI" allowfullscreen></video>
 </div>
 
 SI NO HAY VIDEO QUE MOSTRAR, PEGAR ESTE CODIGO
-div class="desktop-video-box">
+
               <span class="closed-icon">🔒</span>
               <span>Sección cerrada</span>
               <small style="font-size:0.78rem;opacity:0.6;">No hay video disponible por ahora</small>
@@ -757,7 +765,7 @@ div class="desktop-video-box">
           </div>
           <div class="noticia-row">
             <span class="num">#4</span>
-            <span class="titulo">¡FRANCIA valio madres!  Francia fue vencida por España con un resultado de Francia 0-2 España.</span>
+            <span class="titulo">¡FRANCIA no gano nada!</span>
             <span class="fecha">15 julio 2026</span>
             <span class="estado anterior">anterior</span>
           </div>
@@ -765,16 +773,25 @@ div class="desktop-video-box">
             <span class="num">#5</span>
             <span class="titulo">Quiniela Coronada, se abre la quiniela Coronada, indicaciones en mi perfil de Facebook</span>
             <span class="fecha">17 Julio 2026</span>
-            <span class="estado nuevo">nuevo</span>
+            <span class="estado anterior">anterior</span>
           </div>
           <div class="noticia-row">
             <span class="num">#6</span>
-            <span class="titulo">¡FRANCIA Tercer lugar! si Francia gana al menos el tercer lugar, tareas y actividades al 50% en el mes de Agosto, si queda en cuarto lugar queda a 25%</span>
-            <span class="fecha">18 julio 2026</span>
-            <span class="estado reciente">reciente</span>
+            <span class="titulo">¡¡¡Vacacionmes Agostinas!!! descansen, les desa Tareas La Lechuza</span>
+            <span class="fecha">01 Agosto 2026</span>
+            <span class="estado nuevo">nuevo</span>
           </div>
+          <div class="noticia-row">
+            <span class="num">#7</span>
+            <span class="titulo">Agosto al 25% estara vigente en todas tus actividades desde el 01 al 30 de este mes</span>
+            <span class="fecha">01 Agosto 2026</span>
+            <span class="estado nuevo">nuevo</span>
+          </div>
+
+
         </div>
-        
+        </div>
+        </div>
         </div>
         <!-- /IMPORTANTE
          EN SPAN CLASS="estado ..." reemplazar por las palabras "nuevo", "reciente" o "anterior" (ESTO PARA MANTENER ACTIVA LA WEB)-->
